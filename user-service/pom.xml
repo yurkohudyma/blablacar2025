@@ -60,8 +60,14 @@
 			<artifactId>postgresql</artifactId>
 			<version>42.7.4</version>
 		</dependency>
+        <dependency>
+            <groupId>ua.hudyma</groupId>
+            <artifactId>trip-service</artifactId>
+            <version>0.0.1</version>
+            <scope>compile</scope>
+        </dependency>
 
-	</dependencies>
+    </dependencies>
 
 	<build>
 		<plugins>

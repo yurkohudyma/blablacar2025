@@ -14,19 +14,7 @@
 	<name>BlaBlaCar2025</name>
 	<description>BlaBlaCar</description>
 	<packaging>pom</packaging>
-	<url/>
-	<licenses>
-		<license/>
-	</licenses>
-	<developers>
-		<developer/>
-	</developers>
-	<scm>
-		<connection/>
-		<developerConnection/>
-		<tag/>
-		<url/>
-	</scm>
+
 	<properties>
 		<java.version>19</java.version>
 	</properties>
@@ -64,6 +52,9 @@
 
 	<modules>
 		<module>user-service</module>
+		<module>trip-service</module>
+		<module>config-service</module>
+		<module>discovery-service</module>
 	</modules>
 
 </project>
