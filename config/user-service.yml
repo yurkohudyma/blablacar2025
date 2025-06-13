@@ -1,0 +1,37 @@
+server:
+  port: 9091
+
+spring:
+  datasource:
+     url: jdbc:postgresql://localhost:5432/bbc_userservice
+     username: postgres
+     password: postgres
+     driver-class-name: org.postgresql.Driver
+
+  application:
+    name: BlaBlaCar2025 User Service
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    open-in-view: false
+    properties:
+      hibernate:
+        show_sql: false
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+
+blablacar:
+  user-service:
+    version: 0.0.1
+
+logging:
+  level:
+    org.springframework.security: TRACE
+
+eureka:
+  client:
+    server-url:
+      default-zone: http://localhost:8761/eureka

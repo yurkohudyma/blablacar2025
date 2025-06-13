@@ -1,18 +1,2 @@
 server:
-  port: 9093
-
-spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/bbc_configservice
-    username: postgres
-    password: postgres
-    driver-class-name: org.postgresql.Driver
-
-  jpa:
-    hibernate:
-      ddl-auto: update
-    open-in-view: false
-
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+  port: 9090
