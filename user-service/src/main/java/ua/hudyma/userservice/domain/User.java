@@ -1,12 +1,9 @@
 package ua.hudyma.userservice.domain;
 
 import jakarta.persistence.Embedded;
-import jakarta.persistence.OneToMany;
-import ua.hudyma.tripservice.domain.Trip;
+import jakarta.persistence.MappedSuperclass;
 
-import java.util.ArrayList;
-import java.util.List;
-
+@MappedSuperclass
 public abstract class User {
 
     @Embedded
@@ -14,8 +11,8 @@ public abstract class User {
 
     // todo private Rating rating;
     //todo Balance balance;
-    @OneToMany
-    private List<Trip> trips = new ArrayList<>();
+   /* @OneToMany
+    private List<Trip> trips = new ArrayList<>();*/
 
 
 }

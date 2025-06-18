@@ -1,6 +1,7 @@
 package ua.hudyma.userservice.domain;
 
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.Transient;
 
 import java.util.Date;
 
@@ -11,7 +12,8 @@ public class Profile {
     private String surname;
     private Date birthday;
     private String email;
-    private transient String password;
+    @Transient
+    private String password;
     private String phoneNumber;
     private String about;
 }

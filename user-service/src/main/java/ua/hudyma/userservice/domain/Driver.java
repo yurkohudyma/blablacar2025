@@ -1,12 +1,12 @@
-package ua.hudyma.tripservice.domain;
+package ua.hudyma.userservice.domain;
 
 import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table(name = "trips")
+@Table (name = "drivers")
 @Data
-public class Trip {
+public class Driver extends User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

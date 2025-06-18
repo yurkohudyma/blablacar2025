@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/bbc_discoveryservice
+    url: jdbc:mysql://localhost:3306/bbc_tripservice
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
