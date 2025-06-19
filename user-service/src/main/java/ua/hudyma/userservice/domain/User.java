@@ -2,7 +2,9 @@ package ua.hudyma.userservice.domain;
 
 import jakarta.persistence.Embedded;
 import jakarta.persistence.MappedSuperclass;
+import lombok.Data;
 
+@Data
 @MappedSuperclass
 public abstract class User {
 
@@ -11,8 +13,4 @@ public abstract class User {
 
     // todo private Rating rating;
     //todo Balance balance;
-   /* @OneToMany
-    private List<Trip> trips = new ArrayList<>();*/
-
-
 }

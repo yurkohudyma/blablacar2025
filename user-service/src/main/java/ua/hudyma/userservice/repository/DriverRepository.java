@@ -7,4 +7,5 @@ import ua.hudyma.userservice.domain.Driver;
 @Repository
 public interface DriverRepository extends JpaRepository<Driver, Long> {
 
+
 }

@@ -9,7 +9,7 @@ spring:
      driver-class-name: org.postgresql.Driver
 
   application:
-    name: BlaBlaCar2025 User Service
+    name: user-service
   jpa:
     hibernate:
       ddl-auto: update
