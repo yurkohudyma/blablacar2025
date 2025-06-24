@@ -12,4 +12,10 @@ public class Trip {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
+    @Column(nullable = false)
+    Long driverId;
+
+    @Column(nullable = false)
+    Long carId;
+
 }

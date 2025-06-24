@@ -1,6 +1,7 @@
 package ua.hudyma.userservice.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Transient;
 import lombok.Data;
@@ -13,9 +14,9 @@ public class Profile {
 
     private String name;
     private String surname;
-
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
+    @Column(nullable = false)
     private String email;
     @Transient
     private String password;
