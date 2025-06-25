@@ -11,6 +11,7 @@ import ua.hudyma.userservice.repository.DriverRepository;
 import ua.hudyma.userservice.service.DriverService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,14 +25,30 @@ public class DriverController {
         return driverService.getProfileByDriverId(driverId);
     }
 
+    @GetMapping("/{tripId}")
+    public Optional<Driver> getDriverByTripId (@PathVariable String tripId){
+        return driverService.getDriverByTripId(tripId);
+    }
+
     @GetMapping("/getAllTrips/{driverId}")
     public List<Trip> getTripByDriverId (@PathVariable Long driverId){
         return driverService.getAllTripsByDriverId(driverId);
     }
 
-    @PostMapping("/add")
+    @PostMapping("/{tripId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void addDriver (@RequestBody Driver driver){
-        driverRepository.save(driver);
+    public void addDriver (@RequestBody Driver driver, @PathVariable String tripId){
+        driverService.persist (driver, tripId);
+    }
+
+    @PatchMapping("/{driverId}/{tripId}")
+    public void setDriverForTrip (@PathVariable Long driverId, @PathVariable String tripId){
+        var driver = driverService.getDriverById (driverId);
+        if (driver.isPresent()){
+            driverService.persist(driver.get(), tripId);
+        }
+        else {
+            log.error("Driver {} not found", driverId);
+        }
     }
 }
