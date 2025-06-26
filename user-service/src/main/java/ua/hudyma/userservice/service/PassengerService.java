@@ -2,8 +2,6 @@ package ua.hudyma.userservice.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import ua.hudyma.userservice.domain.Passenger;
 import ua.hudyma.userservice.repository.PassengerRepository;
 

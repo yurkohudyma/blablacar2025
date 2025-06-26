@@ -64,4 +64,16 @@ public class DriverService {
     public Optional<Driver> getDriverByTripId(String tripId) {
         return  driverRepository.findByTripId(tripId);
     }
+
+    @GetMapping
+    public boolean checkIfExists(String tripId) {
+        checkEureka();
+        try {
+            return tripClient.existsById(tripId);
+        } catch (Exception e) {
+            log.error("Failed to fetch trips for trip {}: {}", tripId, e.getMessage());
+        }
+        log.error("error finding trip {}", tripId);
+        return false;
+    }
 }

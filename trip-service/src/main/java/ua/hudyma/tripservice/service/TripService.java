@@ -21,6 +21,10 @@ public class TripService {
         return tripRepository.findById (id);
     }
 
+    public boolean existsById (String tripId){
+        return tripRepository.existsById(tripId);
+    }
+
     public List<Trip> getAllTripsByDriverId (Long driverId){
         return tripRepository.findAllByDriverId(driverId);
     }

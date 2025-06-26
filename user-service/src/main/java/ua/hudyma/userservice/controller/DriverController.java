@@ -19,7 +19,7 @@ import java.util.Optional;
 @RequestMapping("/drivers")
 public class DriverController {
     private final DriverService driverService;
-    private final DriverRepository driverRepository;
+
     @GetMapping("/profile/{driverId}")
     public Profile getProfile (@PathVariable Long driverId){
         return driverService.getProfileByDriverId(driverId);
@@ -44,11 +44,14 @@ public class DriverController {
     @PatchMapping("/{driverId}/{tripId}")
     public void setDriverForTrip (@PathVariable Long driverId, @PathVariable String tripId){
         var driver = driverService.getDriverById (driverId);
-        if (driver.isPresent()){
-            driverService.persist(driver.get(), tripId);
-        }
-        else {
+        var trip = driverService.checkIfExists (tripId);
+        if (driver.isEmpty()){
             log.error("Driver {} not found", driverId);
+        } else if (!trip) {
+            log.error("Trip {} not found", tripId);
+        } else {
+            driverService.persist(driver.get(), tripId);
+
         }
     }
 }

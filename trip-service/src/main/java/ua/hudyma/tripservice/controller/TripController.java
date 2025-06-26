@@ -29,6 +29,11 @@ public class TripController {
         return tripService.getAllTripsByDriverId(driverId);
     }
 
+    @GetMapping("/exists/{tripId}")
+    public boolean existsById(@PathVariable String tripId) {
+        return tripService.existsById(tripId);
+    }
+
     @PostMapping("/add/{driverId}/{depId}/{destId}")
     public void addTripForDriverId (@RequestBody Trip trip,
                                     @PathVariable Long driverId,
