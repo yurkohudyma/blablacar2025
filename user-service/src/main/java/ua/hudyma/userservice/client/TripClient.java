@@ -9,6 +9,6 @@ import java.util.List;
 
 @FeignClient(name = "trip-service")
 public interface TripClient {
-    @GetMapping("/getAllTrips/{driverId}")
+    @GetMapping("/trips/getAllTrips/{driverId}")
     List<Trip> findAllByDriverId(@PathVariable("driverId") Long driverId);
 }

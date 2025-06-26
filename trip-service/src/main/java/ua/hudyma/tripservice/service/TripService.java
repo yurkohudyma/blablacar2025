@@ -28,6 +28,7 @@ public class TripService {
         tripRepository.save(trip);
     }
 
-    public void getCityById(String depId) {
-    }
+    //todo
+    // public void getCityById(String depId)
+
 }
