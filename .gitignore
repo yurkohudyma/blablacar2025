@@ -39,3 +39,5 @@ build/
 /mvnw
 /user-service/mvnw.cmd
 /mvnw.cmd
+/trip-service/.env
+/trip-service/src/main/resources/application.properties

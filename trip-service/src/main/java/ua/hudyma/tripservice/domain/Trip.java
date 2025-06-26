@@ -1,12 +1,15 @@
 package ua.hudyma.tripservice.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import com.aventrix.jnanoid.jnanoid.NanoIdUtils;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 import ua.hudyma.tripservice.service.DistanceService;
 import ua.hudyma.tripservice.util.DistanceCalculator;
 
 import java.security.SecureRandom;
+import java.time.LocalDateTime;
 import java.util.Random;
 
 @Entity
@@ -28,6 +31,14 @@ public class Trip {
 
     @Column
     Double optimalDistance;
+
+    @Column
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
+    LocalDateTime tripCreated;
+
+    @Column
+    @JsonFormat(pattern = "HH:mm dd-MM-yyyy")
+    LocalDateTime tripAssigned;
 
     @ManyToOne
     @JoinColumn(name = "destination_id", nullable = false)

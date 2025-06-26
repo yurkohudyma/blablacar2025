@@ -8,6 +8,7 @@ import ua.hudyma.tripservice.service.CityService;
 import ua.hudyma.tripservice.service.TripService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,7 +20,7 @@ public class TripController {
     private final CityService cityService;
 
     @GetMapping("/{id}")
-    public Trip getTripById (@PathVariable String id){
+    public Optional<Trip> getTripById (@PathVariable String id){
         return tripService.getTripById(id);
     }
 
@@ -36,8 +37,8 @@ public class TripController {
         var depCity = cityService.getCityById (depId);
         var destCity = cityService.getCityById(destId);
         trip.setDriverId(driverId);
-        trip.setDeparture(depCity);
-        trip.setDestination(destCity);
+        depCity.ifPresent(trip::setDeparture);
+        destCity.ifPresent(trip::setDestination);
         tripService.persistTripForDriver(trip, driverId);
     }
 }

@@ -6,7 +6,9 @@ import org.springframework.stereotype.Service;
 import ua.hudyma.tripservice.repository.TripRepository;
 import ua.hudyma.tripservice.domain.Trip;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -15,8 +17,8 @@ public class TripService {
 
     private final TripRepository tripRepository;
 
-    public Trip getTripById (String id){
-        return tripRepository.findById (id).orElseThrow();
+    public Optional<Trip> getTripById (String id){
+        return tripRepository.findById (id);
     }
 
     public List<Trip> getAllTripsByDriverId (Long driverId){
@@ -25,10 +27,7 @@ public class TripService {
 
     public void persistTripForDriver(Trip trip, Long driverId) {
         trip.setDriverId(driverId);
+        trip.setTripCreated(LocalDateTime.now());
         tripRepository.save(trip);
     }
-
-    //todo
-    // public void getCityById(String depId)
-
 }

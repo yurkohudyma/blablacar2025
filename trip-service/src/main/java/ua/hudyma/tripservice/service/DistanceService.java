@@ -1,26 +1,44 @@
 package ua.hudyma.tripservice.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import ua.hudyma.tripservice.domain.City;
 
+@Component
+@ConfigurationProperties(prefix = "api")
 public class DistanceService {
 
     private static final RestTemplate restTemplate = new RestTemplate();
-    private static final String API_KEY = "d6be4184-80a7-4db4-8c22-a3540a16670c";
+    private static String staticKey;
+    @Value("${api.key}")
+    private String key;
+
+    public void setKey(String key) {
+        this.key = key;
+        DistanceService.staticKey = key; // ← передаємо в static
+    }
+
+    public static String getStaticKey() {
+        return staticKey;
+    }
 
     public static double getDistance(City departure, City destination) {
-        var coorDep = departure.getLatitude()+","+departure.getLongitude();
-        var coorDest = destination.getLatitude()+","+ destination.getLongitude();
+        String key = getStaticKey(); // ← буде ініціалізовано після старту
+
         String url = UriComponentsBuilder.fromHttpUrl("https://graphhopper.com/api/1/route")
-                .queryParam("point", coorDep)
-                .queryParam("point", coorDest)
+                .queryParam("point", departure.getLatitude() + "," + departure.getLongitude())
+                .queryParam("point", destination.getLatitude() + "," + destination.getLongitude())
                 .queryParam("vehicle", "car")
                 .queryParam("locale", "uk")
-                .queryParam("calc_points", "false") // повертати масив GPS-точок, які формують шлях
-                .queryParam("key", API_KEY)
+                .queryParam("calc_points", "false")
+                .queryParam("key", key)
                 .toUriString();
 
         ResponseEntity<JsonNode> response = restTemplate.getForEntity(url, JsonNode.class);
