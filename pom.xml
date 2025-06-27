@@ -65,6 +65,7 @@
 		<module>trip-service</module>
 		<module>config-service</module>
 		<module>discovery-service</module>
-	</modules>
+        <module>booking-service</module>
+    </modules>
 
 </project>

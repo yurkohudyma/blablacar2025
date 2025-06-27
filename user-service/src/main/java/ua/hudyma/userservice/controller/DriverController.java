@@ -44,10 +44,10 @@ public class DriverController {
     @PatchMapping("/{driverId}/{tripId}")
     public void setDriverForTrip (@PathVariable Long driverId, @PathVariable String tripId){
         var driver = driverService.getDriverById (driverId);
-        var trip = driverService.checkIfExists (tripId);
+        var tripExists = driverService.checkIfExists (tripId);
         if (driver.isEmpty()){
             log.error("Driver {} not found", driverId);
-        } else if (!trip) {
+        } else if (!tripExists) {
             log.error("Trip {} not found", tripId);
         } else {
             driverService.persist(driver.get(), tripId);

@@ -13,7 +13,7 @@ public interface TripClient {
     @GetMapping("/trips/getAllTrips/{driverId}")
     List<Trip> findAllByDriverId(@PathVariable("driverId") Long driverId);
 
-    @GetMapping(("/trips/exists/{tripId}"))
+    @GetMapping("/trips/exists/{tripId}")
     boolean existsById (@PathVariable String tripId);
 
 }

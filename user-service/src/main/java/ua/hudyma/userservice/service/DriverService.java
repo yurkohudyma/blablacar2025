@@ -71,7 +71,7 @@ public class DriverService {
         try {
             return tripClient.existsById(tripId);
         } catch (Exception e) {
-            log.error("Failed to fetch trips for trip {}: {}", tripId, e.getMessage());
+            log.error("Failed to fetch trip {}: {}", tripId, e.getMessage());
         }
         log.error("error finding trip {}", tripId);
         return false;
