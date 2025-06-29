@@ -14,5 +14,5 @@ public class Passenger extends User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    String tripId;
+    /*String tripId;*/
 }

@@ -48,6 +48,9 @@ public class Trip {
     @JoinColumn(name = "departure_id", nullable = false)
     private City departure;
 
+    @Enumerated(value = EnumType.STRING)
+    TripStatus status;
+
     @PrePersist
     public void beforeSave (){
         generateId();

@@ -36,7 +36,7 @@ public class DriverService {
         }
     }
 
-    @GetMapping
+    //@GetMapping
     public List<Trip> getAllTripsByDriverId(Long driverId){
         checkEureka();
         try {
@@ -65,7 +65,7 @@ public class DriverService {
         return  driverRepository.findByTripId(tripId);
     }
 
-    @GetMapping
+    //@GetMapping
     public boolean checkIfExists(String tripId) {
         checkEureka();
         try {

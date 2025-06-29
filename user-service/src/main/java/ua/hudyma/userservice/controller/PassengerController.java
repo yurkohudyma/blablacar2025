@@ -21,12 +21,14 @@ public class PassengerController {
     }
 
     @PostMapping("/{tripId}")
-    public void addPassenger (@RequestBody Passenger passenger, @PathVariable String tripId){
+    public void addPassenger (@RequestBody Passenger passenger,
+                              @PathVariable String tripId){
         passengerService.persist(passenger, tripId);
     }
 
     @PatchMapping("/{passengerId}/{tripId}")
-    public void setPassengerForTrip (@PathVariable Long passengerId, @PathVariable String tripId){
+    public void setPassengerForTrip (@PathVariable Long passengerId,
+                                     @PathVariable String tripId){
         var passenger = passengerService.getById(passengerId);
         var tripExists = passengerService.checkIfExists(tripId);
         if (passenger.isEmpty()){
@@ -34,8 +36,7 @@ public class PassengerController {
         } else if (!tripExists) {
             log.error("Trip {} not found", tripId);
         } else {
-            //passengerService.persist(passenger.get(), tripId);
-            //todo underconstruction
+            passengerService.persist(passenger.get(), tripId);
         }
     }
 

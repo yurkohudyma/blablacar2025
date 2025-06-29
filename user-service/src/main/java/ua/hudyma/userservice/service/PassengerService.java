@@ -10,6 +10,7 @@ import ua.hudyma.userservice.domain.Passenger;
 import ua.hudyma.userservice.dto.TripDto;
 import ua.hudyma.userservice.repository.PassengerRepository;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -25,7 +26,10 @@ public class PassengerService {
     private final DriverService driverService;
 
     public List<Passenger> getPassengerListByTripId(String tripId) {
-        return passengerRepository.findAllByTripId(tripId);
+        //return passengerRepository.findAllByTripId(tripId);
+        //todo refactor via Booking-service link relationship
+        //grab all Mongo entries with tripId
+        return Collections.emptyList();
     }
 
     public void persist(Passenger passenger, String tripId) {
@@ -36,9 +40,12 @@ public class PassengerService {
                         .map(TripDto::passengerId)
                         .anyMatch(e -> e.equals(passenger.getId()));
         if (passIdAllreadyBoundWithTrip){
-            log.error("passenger {} already bound with trip {}", passenger.getId(), tripId);
+            log.error("passenger {} already bound with trip {}",
+                    passenger.getId(), tripId);
         }
         passengerRepository.save(passenger);
+        bookingClient.createTripPassengerBinging(
+                new TripDto(passenger.getId(), tripId));
     }
 
     public Optional<Passenger> getById(Long passengerId) {
@@ -51,7 +58,8 @@ public class PassengerService {
         try {
             return tripClient.existsById(tripId);
         } catch (Exception e) {
-            log.error("Failed to fetch trip {}: {}", tripId, e.getMessage());
+            log.error("Failed to fetch trip {}: {}",
+                    tripId, e.getMessage());
         }
         log.error("error finding trip {}", tripId);
         return false;
