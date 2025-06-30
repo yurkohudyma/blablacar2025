@@ -1,14 +1,11 @@
 package ua.hudyma.tripservice.domain;
 
-import com.aventrix.jnanoid.jnanoid.NanoIdUtils;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.security.SecureRandom;
 import java.util.List;
-import java.util.Random;
 
 @Entity
 @Table(name = "cities")

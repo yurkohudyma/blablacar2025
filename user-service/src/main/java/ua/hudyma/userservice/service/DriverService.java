@@ -6,7 +6,6 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 import ua.hudyma.tripservice.domain.Trip;
 import ua.hudyma.userservice.client.TripClient;
 import ua.hudyma.userservice.domain.Driver;
@@ -28,11 +27,13 @@ public class DriverService {
 
     @PostConstruct
     public void checkEureka() {
-        List<ServiceInstance> instances = discoveryClient.getInstances("trip-service");
+        List<ServiceInstance> instances = discoveryClient
+                .getInstances("trip-service");
         if (instances.isEmpty()) {
             log.warn("No instances of trip-service found in Eureka!");
         } else {
-            log.info("trip-service instances found: {}", instances.size());
+            log.info("trip-service instances found: {}",
+                    instances.size());
         }
     }
 
@@ -41,18 +42,19 @@ public class DriverService {
         try {
             return tripClient.findAllByDriverId(driverId);
         } catch (Exception e) {
-            log.error("Failed to fetch trips for driver {}: {}", driverId, e.getMessage());
+            log.error("Failed to fetch trips for driver {}: {}",
+                    driverId, e.getMessage());
             return Collections.emptyList();
         }
     }
 
     public Profile getProfileByDriverId (Long driverId){
-        var driver = driverRepository.findById(driverId).orElseThrow();
+        var driver = driverRepository
+                .findById(driverId).orElseThrow();
         return driver.getProfile();
     }
 
-    public void persist(Driver driver, String tripId) {
-        driver.setTripId(tripId);
+    public void persist(Driver driver) {
         driverRepository.save(driver);
     }
 
@@ -60,18 +62,19 @@ public class DriverService {
         return driverRepository.findById(driverId);
     }
 
-    public Optional<Driver> getDriverByTripId(String tripId) {
-        return  driverRepository.findByTripId(tripId);
-    }
-
     public boolean checkIfExists(String tripId) {
         checkEureka();
         try {
             return tripClient.existsById(tripId);
         } catch (Exception e) {
-            log.error("Failed to fetch trip {}: {}", tripId, e.getMessage());
+            log.error("Failed to fetch trip {}: {}",
+                    tripId, e.getMessage());
         }
         log.error("error finding trip {}", tripId);
         return false;
+    }
+
+    public boolean existsById(Long driverId) {
+        return driverRepository.existsById(driverId);
     }
 }

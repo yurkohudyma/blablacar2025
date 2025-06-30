@@ -18,7 +18,7 @@ import java.util.Optional;
 public class TripController {
 
     private final TripService tripService;
-    private final CityService cityService;
+
 
     @GetMapping("/{id}")
     public Optional<Trip> getTripById(@PathVariable String id) {
@@ -35,17 +35,18 @@ public class TripController {
         return tripService.existsById(tripId);
     }
 
+    @GetMapping("/existsByDriverId/{driverId}")
+    public boolean existsById(@PathVariable Long driverId) {
+        return tripService.existsByDriverId(driverId);
+    }
+
     @PostMapping("/add/{driverId}/{depId}/{destId}")
-    public void addTripForDriverId(@RequestBody Trip trip,
+    public void addTrip (@RequestBody Trip trip,
                                    @PathVariable Long driverId,
                                    @PathVariable String depId,
                                    @PathVariable String destId) {
-        var depCity = cityService.getCityById(depId);
-        var destCity = cityService.getCityById(destId);
-        trip.setDriverId(driverId);
-        depCity.ifPresent(trip::setDeparture);
-        destCity.ifPresent(trip::setDestination);
-        tripService.persistTripForDriver(trip, driverId);
+
+        tripService.persistTripForDriver(trip, driverId, depId, destId);
     }
 
     @PatchMapping("/setStatus/{tripId}/{status}")

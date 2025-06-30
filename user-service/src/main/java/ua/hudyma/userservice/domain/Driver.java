@@ -20,8 +20,6 @@ public class Driver extends User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    String tripId;
-
     @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Setter(AccessLevel.PRIVATE)
     @JsonIgnore
