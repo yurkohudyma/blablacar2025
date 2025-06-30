@@ -11,6 +11,8 @@ public abstract class User {
     @Embedded
     private Profile profile;
 
+    private Long tripQuantity;
+
     //todo зробити окремий rating-service
 
 }

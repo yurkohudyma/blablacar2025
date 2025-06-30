@@ -28,20 +28,11 @@ public class City {
     private boolean isActive;
     private int population;
     private String timezone;
-    @ManyToMany (fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "city_nearby",
             joinColumns = @JoinColumn(name = "city_id"),
             inverseJoinColumns = @JoinColumn(name = "nearby_city_id")
     )
     private List<City> nearbyCities;
-
-    @PrePersist
-    public void generateId() {
-        if (this.id == null || this.id.isEmpty()) {
-            Random random = new SecureRandom();
-            this.id = NanoIdUtils.randomNanoId(random, NanoIdUtils.DEFAULT_ALPHABET, 4);
-        }
-    }
-
 }
