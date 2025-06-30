@@ -38,7 +38,7 @@ public class TripService {
     }
     public void setStatus(Trip trip, TripStatus status) {
         trip.setStatus(status);
-        //obj received from repo with TX, no saving is necessary
+        //obj received from repo with TX (IN THIS METHOD!!), no saving is necessary
         tripRepository.save(trip);
     }
 }

@@ -16,5 +16,5 @@ public interface BookingClient {
     List<TripDto> findAllByTripId (@PathVariable String tripId);
 
     @PostMapping("/trips-passengers/dto")
-    TripDto createTripPassengerBinging(@RequestBody TripDto tripDto);
+    TripDto createTripPassengerBinding(@RequestBody TripDto tripDto);
 }
