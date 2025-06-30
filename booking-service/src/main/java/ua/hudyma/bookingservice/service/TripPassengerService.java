@@ -29,4 +29,17 @@ public class TripPassengerService {
     public List<TripPassenger> getAllTripPassByTripId(String tripId) {
         return tripPassengerRepository.findByTripId(tripId);
     }
+
+    public boolean deleteEntry(String objectId) {
+        var entry = tripPassengerRepository
+                .findById(objectId);
+        if (entry.isPresent()) {
+            tripPassengerRepository.delete(entry.get());
+            return true;
+        } else {
+            log.error
+                    ("entry {} not found", objectId);
+            return false;
+        }
+    }
 }

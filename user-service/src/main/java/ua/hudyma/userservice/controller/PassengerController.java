@@ -30,7 +30,7 @@ public class PassengerController {
     }
 
     @PatchMapping("/{passengerId}/{tripId}")
-    public ResponseEntity<?> setPassengerForTrip (@PathVariable Long passengerId,
+    public ResponseEntity<String> setPassengerForTrip (@PathVariable Long passengerId,
                                                         @PathVariable String tripId){
         var passed = passengerService.assignPassengerToTrip(passengerId, tripId);
         return passed

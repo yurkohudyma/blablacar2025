@@ -2,6 +2,9 @@ package ua.hudyma.bookingservice.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ua.hudyma.bookingservice.domain.TripPassenger;
 import ua.hudyma.bookingservice.dto.TripDto;
@@ -28,7 +31,21 @@ public class TripPassengerController {
     }
 
     @GetMapping("/{tripId}")
-    public List<TripPassenger> getTripPasByTripId (@PathVariable String tripId){
+    public List<TripPassenger> getTripPasByTripId (
+            @PathVariable String tripId){
         return tripPassengerService.getAllTripPassByTripId (tripId);
+    }
+
+    @DeleteMapping("/{objectId}")
+    public ResponseEntity<String> deleteBindingById (
+            @PathVariable String objectId){
+        if (tripPassengerService.deleteEntry (objectId)){
+            return ResponseEntity.status(HttpStatus.GONE)
+                    .body(String.format
+                    ("Entry %s SUCCESSFULLY deleted", objectId));
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(String.format
+                        ("Entry %s not found", objectId));
     }
 }

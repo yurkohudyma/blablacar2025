@@ -37,3 +37,9 @@ feign:
     config:
       default:
         loggerLevel: FULL
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: env

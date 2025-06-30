@@ -11,6 +11,6 @@ public abstract class User {
     @Embedded
     private Profile profile;
 
-    // todo private Rating rating;
-    //todo Balance balance;
+    //todo зробити окремий rating-service
+
 }
