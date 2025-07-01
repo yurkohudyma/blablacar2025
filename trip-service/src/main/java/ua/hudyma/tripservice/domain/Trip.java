@@ -15,7 +15,7 @@ public class Trip {
     private String id;
 
     @Column(nullable = false)
-    Long driverId;
+    String driverId;
 
     @Column(nullable = false)
     String carId;

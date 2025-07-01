@@ -14,7 +14,7 @@ public class CarService {
     private final CarRepository carRepository;
 
 
-    public List<Car> getCarListByDriverId(Long driverId) {
-        return carRepository.findAllByDriverId (driverId);
-    }
+    /*public List<Car> getCarListByUserId(String userId) {
+        return carRepository.findAllByDriverId(userId);
+    }*/
 }

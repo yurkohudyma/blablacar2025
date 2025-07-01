@@ -25,20 +25,20 @@ public class CarController {
         return carRepository.findById(id).orElseThrow();
     }
 
-    @GetMapping("/getCars/{driverId}")
-    public List<Car> getDriversCarList (@PathVariable Long driverId){
-        return carService.getCarListByDriverId (driverId);
-    }
+    /*@GetMapping("/getCars/{userId}")
+    public List<Car> getDriversCarList (@PathVariable String userId){
+        return carService.getCarListByUserId (userId);
+    }*/
 
-    @PostMapping("/{driverId}")
-    public void addCar (@RequestBody Car car, @PathVariable Long driverId){
-        var driver = driverRepository.findById(driverId);
+    @PostMapping("/{userId}")
+    public void addCar (@RequestBody Car car, @PathVariable String userId){
+        var driver = driverRepository.findById(userId);
         if (driver.isPresent()) {
             car.setDriver(driver.get());
             carRepository.save(car);
         }
         else {
-            log.error("Driver {} not found", driverId);
+            log.error("Driver {} not found", userId);
         }
     }
 }

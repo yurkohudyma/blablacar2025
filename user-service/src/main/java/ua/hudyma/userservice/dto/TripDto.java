@@ -1,3 +1,3 @@
 package ua.hudyma.userservice.dto;
 
-public record TripDto (Long passengerId, String tripId){}
+public record TripDto (String userId, String tripId){}

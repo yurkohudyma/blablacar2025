@@ -1,22 +1,30 @@
 server:
-  port: 9095
+  port: 9092
 
 spring:
-  data:
-    mongodb:
-      host: localhost
-      port: 27017
-      database: bbc_bookingservice
-  application:
-    name: booking-service
+  datasource:
+    url: jdbc:mysql://localhost:3306/bbc_ratingservice
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
+  application:
+    name: rating-service
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    open-in-view: false
+    properties:
+      hibernate:
+        show_sql: false
   mvc:
     hiddenmethod:
       filter:
         enabled: true
 
 blablacar:
-  booking-service:
+  rating-service:
     version: 0.0.1
 
 logging:

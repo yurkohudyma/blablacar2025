@@ -25,7 +25,7 @@ public class PassengerService {
         var dtoList = bookingClient.findAllByTripId(tripId);
         return dtoList.stream()
                 .map(dto -> passengerRepository
-                        .findById(dto.passengerId()))
+                        .findById(dto.userId()))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .toList();
@@ -35,20 +35,20 @@ public class PassengerService {
         var list = bookingClient.findAllByTripId(tripId);
         var passIdAllreadyBoundWithTrip =
                 list.stream()
-                        .map(TripDto::passengerId)
-                        .anyMatch(e -> e.equals(passenger.getId()));
+                        .map(TripDto::userId)
+                        .anyMatch(e -> e.equals(passenger.getUserId()));
         if (passIdAllreadyBoundWithTrip) {
             log.error("passenger {} already bound with trip {}",
-                    passenger.getId(), tripId);
+                    passenger.getUserId(), tripId);
         } else {
             passengerRepository.save(passenger);
             bookingClient.createTripPassengerBinding(
-                    new TripDto(passenger.getId(), tripId));
+                    new TripDto(passenger.getUserId(), tripId));
         }
     }
 
-    public Optional<Passenger> getById(Long passengerId) {
-        return passengerRepository.findById(passengerId);
+    public Optional<Passenger> getById(String userId) {
+        return passengerRepository.findById(userId);
     }
 
     public boolean checkIfExists(String tripId) {
@@ -63,15 +63,15 @@ public class PassengerService {
         return false;
     }
 
-    public boolean assignPassengerToTrip(Long passengerId, String tripId) {
+    public boolean assignPassengerToTrip(String userId, String tripId) {
         try {
-            Optional<Passenger> passengerOpt = getById(passengerId);
+            Optional<Passenger> passengerOpt = getById(userId);
 
             if (passengerOpt.isPresent()) {
                 persist(passengerOpt.get(), tripId);
                 return true;
             } else {
-                log.error("Passenger {} not found", passengerId);
+                log.error("Passenger {} not found", userId);
                 return false;
             }
         } catch (Exception e) {

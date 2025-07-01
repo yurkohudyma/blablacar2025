@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 import ua.hudyma.userservice.domain.Passenger;
 
 @Repository
-public interface PassengerRepository extends JpaRepository <Passenger, Long> {
+public interface PassengerRepository extends JpaRepository <Passenger, String> {
 
 }

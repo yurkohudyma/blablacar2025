@@ -5,7 +5,6 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.*;
 import ua.hudyma.tripservice.domain.Trip;
 import ua.hudyma.tripservice.domain.TripStatus;
-import ua.hudyma.tripservice.service.CityService;
 import ua.hudyma.tripservice.service.TripService;
 
 import java.util.List;
@@ -26,27 +25,27 @@ public class TripController {
     }
 
     @GetMapping("/getAllTrips/{driverId}")
-    public List<Trip> getTripByDriverId(@PathVariable Long driverId) {
+    public List<Trip> getTripByDriverId(@PathVariable String driverId) {
         return tripService.getAllTripsByDriverId(driverId);
     }
 
     @GetMapping("/exists/{tripId}")
-    public boolean existsById(@PathVariable String tripId) {
+    public boolean existsByTripId(@PathVariable String tripId) {
         return tripService.existsById(tripId);
     }
 
-    @GetMapping("/existsByDriverId/{driverId}")
-    public boolean existsById(@PathVariable Long driverId) {
-        return tripService.existsByDriverId(driverId);
+    @GetMapping("/existsByUserId/{userId}")
+    public boolean existsByUserId(@PathVariable String userId) {
+        return tripService.existsByUserId(userId);
     }
 
-    @PostMapping("/add/{driverId}/{depId}/{destId}")
+    @PostMapping("/add/{userId}/{depId}/{destId}")
     public void addTrip (@RequestBody Trip trip,
-                                   @PathVariable Long driverId,
+                                   @PathVariable String userId,
                                    @PathVariable String depId,
                                    @PathVariable String destId) {
 
-        tripService.persistTripForDriver(trip, driverId, depId, destId);
+        tripService.persistTripForDriver(trip, userId, depId, destId);
     }
 
     @PatchMapping("/setStatus/{tripId}/{status}")

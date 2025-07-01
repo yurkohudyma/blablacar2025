@@ -5,6 +5,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Transient;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Date;
 
@@ -16,6 +17,9 @@ public class Profile {
     private String surname;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @CreationTimestamp
+    private Date registeredOn;
     @Column(nullable = false)
     private String email;
     @Transient

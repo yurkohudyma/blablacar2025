@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import ua.hudyma.tripservice.domain.Trip;
 import ua.hudyma.userservice.client.TripClient;
 import ua.hudyma.userservice.domain.Driver;
+import ua.hudyma.userservice.domain.ExperienceLevel;
 import ua.hudyma.userservice.domain.Profile;
 import ua.hudyma.userservice.repository.DriverRepository;
 
@@ -37,7 +38,7 @@ public class DriverService {
         }
     }
 
-    public List<Trip> getAllTripsByDriverId(Long driverId){
+    public List<Trip> getAllTripsByDriverId(String driverId){
         checkEureka();
         try {
             return tripClient.findAllByDriverId(driverId);
@@ -48,18 +49,19 @@ public class DriverService {
         }
     }
 
-    public Profile getProfileByDriverId (Long driverId){
+    public Profile getProfileByDriverId (String userId){
         var driver = driverRepository
-                .findById(driverId).orElseThrow();
+                .findById(userId).orElseThrow();
         return driver.getProfile();
     }
 
     public void persist(Driver driver) {
+        driver.setExpLevel(ExperienceLevel.NEWCOMER);
         driverRepository.save(driver);
     }
 
-    public Optional<Driver> getDriverById(Long driverId) {
-        return driverRepository.findById(driverId);
+    public Optional<Driver> getDriverById(String userId) {
+        return driverRepository.findById(userId);
     }
 
     public boolean checkIfExists(String tripId) {
@@ -74,7 +76,7 @@ public class DriverService {
         return false;
     }
 
-    public boolean existsById(Long driverId) {
-        return driverRepository.existsById(driverId);
+    public boolean existsById(String userId) {
+        return driverRepository.existsById(userId);
     }
 }

@@ -16,12 +16,12 @@ public class TripPassenger {
     @Id
     String id;
     @Indexed
-    Long passengerId;
+    String userId;
     @Indexed
     String tripId;
 
-    public TripPassenger(Long passengerId, String tripId) {
-        this.passengerId = passengerId;
+    public TripPassenger(String userId, String tripId) {
+        this.userId = userId;
         this.tripId = tripId;
     }
 }

@@ -33,33 +33,35 @@ public class TripService {
         return tripRepository.findById(id);
     }
 
-    public boolean existsByDriverId(Long driverId) {
-        return userClient.existsById(driverId);
+    public boolean existsByUserId(String userId) {
+        return userClient.existsById(userId);
     }
 
     public boolean existsById(String tripId) {
         return tripRepository.existsById(tripId);
     }
 
-    public List<Trip> getAllTripsByDriverId(Long driverId) {
+    public List<Trip> getAllTripsByDriverId(String driverId) {
         return tripRepository.findAllByDriverId(driverId);
     }
 
-    public void persistTripForDriver(Trip trip, Long driverId, String depId, String destId) {
+    public void persistTripForDriver(Trip trip, String userId, String depId, String destId) {
         var depCity = cityService.getCityById(depId);
         var destCity = cityService.getCityById(destId);
-        if (userClient.existsById(driverId)){
-            trip.setDriverId(driverId);
+        if (userClient.existsById(userId)){
+            trip.setDriverId(userId);
+            //todo retrieve user for setting 0 trips counter
             depCity.ifPresent(trip::setDeparture);
             destCity.ifPresent(trip::setDestination);
             applyGeneratedData(trip);
-            trip.setDriverId(driverId);
+            trip.setDriverId(userId);
             trip.setTripCreated(LocalDateTime.now());
             trip.setStatus(TripStatus.WAITING_CONFIRMATION);
             tripRepository.save(trip);
+            //todo implement incrementing tripQuantity field upon reaching COMPLETE status for trip
         }
         else {
-            log.error("driver {} not found", driverId);
+            log.error("driver {} not found", userId);
         }
 
     }

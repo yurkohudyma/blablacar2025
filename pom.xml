@@ -66,6 +66,7 @@
 		<module>config-service</module>
 		<module>discovery-service</module>
         <module>booking-service</module>
+        <module>rating-service</module>
     </modules>
 
 </project>

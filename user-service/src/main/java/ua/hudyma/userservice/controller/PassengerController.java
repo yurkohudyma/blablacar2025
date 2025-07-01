@@ -30,13 +30,13 @@ public class PassengerController {
     }
 
     @PatchMapping("/{passengerId}/{tripId}")
-    public ResponseEntity<String> setPassengerForTrip (@PathVariable Long passengerId,
+    public ResponseEntity<String> setPassengerForTrip (@PathVariable String userId,
                                                         @PathVariable String tripId){
-        var passed = passengerService.assignPassengerToTrip(passengerId, tripId);
+        var passed = passengerService.assignPassengerToTrip(userId, tripId);
         return passed
                 ? ResponseEntity.ok().build()
                 : ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(String.format("Passenger %d not found", passengerId));
+                .body(String.format("Passenger %s not found", userId));
 
     }
 }

@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface TripRepository extends JpaRepository <Trip, String> {
-    List<Trip> findAllByDriverId(Long driverId);
+    List<Trip> findAllByDriverId(String driverId);
 }

@@ -11,7 +11,7 @@ import java.util.List;
 public interface TripClient {
 
     @GetMapping("/trips/getAllTrips/{driverId}")
-    List<Trip> findAllByDriverId(@PathVariable("driverId") Long driverId);
+    List<Trip> findAllByDriverId(@PathVariable("driverId") String driverId);
 
     @GetMapping("/trips/exists/{tripId}")
     boolean existsById (@PathVariable String tripId);
