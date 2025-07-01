@@ -23,9 +23,11 @@ public class Rating {
     @Column(nullable = false)
     String userId;
 
-    @OneToMany(mappedBy = "rating", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "rating",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER)
     @Setter(AccessLevel.PRIVATE)
-    @JsonIgnore
+    //@JsonIgnore
     private List<Review> reviewList = new ArrayList<>();
 
 

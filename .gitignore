@@ -41,3 +41,6 @@ build/
 /mvnw.cmd
 /trip-service/.env
 /trip-service/src/main/resources/application.properties
+/db/cars.csv
+/db/drivers.csv
+/db/passengers.csv

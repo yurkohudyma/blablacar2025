@@ -22,7 +22,7 @@ public class TripPassengerService {
 
     public TripPassenger addEntry(TripDto tripDto) {
         var tripPassenger = new TripPassenger(
-                tripDto.userId(), tripDto.tripId());
+                tripDto.passengerId(), tripDto.tripId());
         return tripPassengerRepository.save(tripPassenger);
     }
 

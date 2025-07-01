@@ -21,7 +21,8 @@ public class Passenger extends User {
     public void generateId() {
         if (this.userId == null || this.userId.isEmpty()) {
             Random random = new SecureRandom();
-            this.userId = NanoIdUtils.randomNanoId(random, NanoIdUtils.DEFAULT_ALPHABET, 6);
+            this.userId = NanoIdUtils.randomNanoId(
+                    random, NanoIdUtils.DEFAULT_ALPHABET, 6);
         }
     }
 }

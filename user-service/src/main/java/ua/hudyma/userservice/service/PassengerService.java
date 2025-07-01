@@ -5,6 +5,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import ua.hudyma.userservice.client.BookingClient;
 import ua.hudyma.userservice.client.TripClient;
+import ua.hudyma.userservice.domain.ExperienceLevel;
 import ua.hudyma.userservice.domain.Passenger;
 import ua.hudyma.userservice.dto.TripDto;
 import ua.hudyma.userservice.repository.PassengerRepository;
@@ -25,7 +26,7 @@ public class PassengerService {
         var dtoList = bookingClient.findAllByTripId(tripId);
         return dtoList.stream()
                 .map(dto -> passengerRepository
-                        .findById(dto.userId()))
+                        .findById(dto.passengerId()))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .toList();
@@ -35,12 +36,16 @@ public class PassengerService {
         var list = bookingClient.findAllByTripId(tripId);
         var passIdAllreadyBoundWithTrip =
                 list.stream()
-                        .map(TripDto::userId)
+                        .map(TripDto::passengerId)
                         .anyMatch(e -> e.equals(passenger.getUserId()));
         if (passIdAllreadyBoundWithTrip) {
             log.error("passenger {} already bound with trip {}",
                     passenger.getUserId(), tripId);
         } else {
+            passenger.setExpLevel(ExperienceLevel.NEWCOMER);
+            var tripQty = passenger.getTripQuantity();
+            tripQty = tripQty == null ? 0L : tripQty + 1L;
+            passenger.setTripQuantity(tripQty);
             passengerRepository.save(passenger);
             bookingClient.createTripPassengerBinding(
                     new TripDto(passenger.getUserId(), tripId));
@@ -66,7 +71,6 @@ public class PassengerService {
     public boolean assignPassengerToTrip(String userId, String tripId) {
         try {
             Optional<Passenger> passengerOpt = getById(userId);
-
             if (passengerOpt.isPresent()) {
                 persist(passengerOpt.get(), tripId);
                 return true;

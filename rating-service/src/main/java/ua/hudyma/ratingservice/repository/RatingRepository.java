@@ -6,4 +6,5 @@ import ua.hudyma.ratingservice.domain.Rating;
 
 @Repository
 public interface RatingRepository extends JpaRepository<Rating, Long> {
+    boolean existsByUserId(String userId);
 }
