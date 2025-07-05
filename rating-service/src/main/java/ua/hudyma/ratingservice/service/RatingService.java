@@ -31,4 +31,8 @@ public class RatingService {
     public Rating getById(Long ratingId) {
         return ratingRepository.findById(ratingId).orElseThrow();
     }
+
+    public Rating getByUserId(String driverId) {
+        return ratingRepository.findByUserId(driverId).orElseThrow();
+    }
 }

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ua.hudyma.tripservice.domain.Trip;
 import ua.hudyma.userservice.domain.Driver;
 import ua.hudyma.userservice.domain.Profile;
+import ua.hudyma.userservice.dto.ReviewDto;
 import ua.hudyma.userservice.service.DriverService;
 
 import java.util.List;
@@ -38,4 +39,11 @@ public class DriverController {
     public void addDriver (@RequestBody Driver driver){
         driverService.persist (driver);
     }
+
+    @GetMapping("/reviews/{driverId}/{tripId}")
+    public List<ReviewDto> getAllReviewsForDriverAndTrip (@PathVariable String driverId,
+                                                          @PathVariable String tripId){
+        return driverService.getAllReviewsForDriverIdAndTripId(driverId, tripId);
+    }
+
 }

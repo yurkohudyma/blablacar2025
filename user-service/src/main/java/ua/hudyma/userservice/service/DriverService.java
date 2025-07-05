@@ -5,14 +5,19 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import ua.hudyma.tripservice.domain.Trip;
 import ua.hudyma.userservice.client.TripClient;
 import ua.hudyma.userservice.domain.Driver;
 import ua.hudyma.userservice.domain.ExperienceLevel;
 import ua.hudyma.userservice.domain.Profile;
+import ua.hudyma.userservice.dto.ReviewDto;
 import ua.hudyma.userservice.repository.DriverRepository;
 
+import java.net.URI;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +29,7 @@ public class DriverService {
 
     private final TripClient tripClient;
     private final DiscoveryClient discoveryClient;
+    private final RestTemplate restTemplate;
     private final DriverRepository driverRepository;
 
     @PostConstruct
@@ -36,6 +42,19 @@ public class DriverService {
             log.info("trip-service instances found: {}",
                     instances.size());
         }
+    }
+
+    public List<ReviewDto> getAllReviewsForDriverIdAndTripId (String driverId, String tripId){
+        var instances = discoveryClient.getInstances("rating-service");
+        ServiceInstance serviceInstance = instances.get(0);
+        var uri = serviceInstance.getUri() + "/reviews/{driverId}/{tripId}";
+        return restTemplate.exchange(
+                uri,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<ReviewDto>>(){},
+                driverId,
+                tripId).getBody();
     }
 
     public List<Trip> getAllTripsByDriverId(String driverId){
