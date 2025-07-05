@@ -7,7 +7,7 @@ import ua.hudyma.userservice.client.BookingClient;
 import ua.hudyma.userservice.client.TripClient;
 import ua.hudyma.userservice.domain.ExperienceLevel;
 import ua.hudyma.userservice.domain.Passenger;
-import ua.hudyma.userservice.dto.TripDto;
+import ua.hudyma.userservice.dto.TripPassengerDto;
 import ua.hudyma.userservice.repository.PassengerRepository;
 
 import java.util.List;
@@ -36,7 +36,7 @@ public class PassengerService {
         var list = bookingClient.findAllByTripId(tripId);
         var passIdAllreadyBoundWithTrip =
                 list.stream()
-                        .map(TripDto::passengerId)
+                        .map(TripPassengerDto::passengerId)
                         .anyMatch(e -> e.equals(passenger.getUserId()));
         if (passIdAllreadyBoundWithTrip) {
             log.error("passenger {} already bound with trip {}",
@@ -48,7 +48,7 @@ public class PassengerService {
             passenger.setTripQuantity(tripQty);
             passengerRepository.save(passenger);
             bookingClient.createTripPassengerBinding(
-                    new TripDto(passenger.getUserId(), tripId));
+                    new TripPassengerDto(passenger.getUserId(), tripId));
         }
     }
 

@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ua.hudyma.bookingservice.domain.TripPassenger;
+import ua.hudyma.bookingservice.dto.PassengerDto;
 import ua.hudyma.bookingservice.dto.TripDto;
 import ua.hudyma.bookingservice.service.TripPassengerService;
 
@@ -27,7 +28,7 @@ public class TripPassengerController {
     @PostMapping("/dto")
     public TripDto addEntry(@RequestBody TripDto tripDto) {
         TripPassenger saved = tripPassengerService.addEntry(tripDto);
-        return new TripDto( saved.getPassengerId(), tripDto.tripId());
+        return new TripDto(saved.getPassengerId(), tripDto.tripId());
     }
 
     @GetMapping("/{tripId}")
@@ -35,6 +36,14 @@ public class TripPassengerController {
             @PathVariable String tripId){
         return tripPassengerService.getAllTripPassByTripId (tripId);
     }
+
+    /*@GetMapping("/{tripId}")
+    public List<TripDto> getAllPassengersByTripId (@PathVariable String tripId){
+        return getTripPasByTripId(tripId)
+                .stream()
+                .map(trip -> new TripDto(trip.getPassengerId(), trip.getTripId()))
+                .toList();
+    }*/
 
     @DeleteMapping("/{objectId}")
     public ResponseEntity<String> deleteBindingById (

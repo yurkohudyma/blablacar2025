@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import ua.hudyma.tripservice.domain.Trip;
+import ua.hudyma.tripservice.dto.TripDto;
 import ua.hudyma.userservice.client.TripClient;
 import ua.hudyma.userservice.domain.Driver;
 import ua.hudyma.userservice.domain.ExperienceLevel;
@@ -33,7 +34,7 @@ public class DriverService {
     private final TripClient tripClient;
     private final DiscoveryClient discoveryClient;
     private final RestTemplate restTemplate;
-    private final CircuitBreakerFactory circuitBreakerFactory;
+    private final CircuitBreakerFactory<?,?> circuitBreakerFactory;
     private final DriverRepository driverRepository;
 
     @PostConstruct
@@ -111,5 +112,14 @@ public class DriverService {
 
     public boolean existsById(String userId) {
         return driverRepository.existsById(userId);
+    }
+
+    public Driver getDriverByTripId(String tripId) {
+        var instances = discoveryClient
+                .getInstances("trip-service");
+        var serviceInstance = instances.get(0);
+        var uri = serviceInstance.getUri() + "/trips/{id}";
+        var trip = restTemplate.getForObject(uri, TripDto.class, tripId);
+        return driverRepository.findByUserId(trip.driverId()).orElseThrow();
     }
 }

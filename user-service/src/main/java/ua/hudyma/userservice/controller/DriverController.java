@@ -34,6 +34,11 @@ public class DriverController {
         return driverService.getAllTripsByDriverId(userId);
     }
 
+    @GetMapping("{tripId}")
+    public Driver getDriverByTripId (@PathVariable String tripId){
+        return driverService.getDriverByTripId(tripId);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void addDriver (@RequestBody Driver driver){

@@ -56,5 +56,6 @@ resilience:
   circuitbreaker:
     instances:
       user-service:
+#        properties
 
 
