@@ -12,8 +12,4 @@ import java.util.List;
 public class CarService {
 
     private final CarRepository carRepository;
-
-    /*public List<Car> getCarListByDriverId(String driverId) {
-        return carRepository.findAllByDriverId(driverId);
-    }*/
 }

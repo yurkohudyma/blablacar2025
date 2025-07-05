@@ -25,11 +25,6 @@ public class CarController {
         return carRepository.findById(id).orElseThrow();
     }
 
-    /*@GetMapping("/getCars/{driverId}")
-    public List<Car> getDriversCarList (@PathVariable String driverId){
-        return carService.getCarListByDriverId(driverId);
-    }*/
-
     @PostMapping("/{userId}")
     public void addCar (@RequestBody Car car, @PathVariable String userId){
         var driver = driverRepository.findById(userId);

@@ -1,5 +1,6 @@
 package ua.hudyma.userservice.service;
 
+import jakarta.annotation.Nullable;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -116,13 +117,21 @@ public class DriverService {
     }
 
     public Driver getDriverByTripId(String tripId) {
-        var instances = discoveryClient
-                .getInstances("trip-service");
+        var instances = discoveryClient.getInstances("trip-service");
+        if (instances == null || instances.isEmpty()) {
+            return new Driver();
+        }
         var serviceInstance = instances.get(0);
         var uri = serviceInstance.getUri() + "/trips/{id}";
         var trip = restTemplate.getForObject(uri, TripDto.class, tripId);
-        return driverRepository.findByUserId(trip.driverId()).orElseThrow();
+
+        if (trip == null || trip.driverId() == null) {
+            return new Driver();
+        }
+        return driverRepository.findByUserId(trip.driverId())
+                .orElse(new Driver());
     }
+
 
     public List<Car> getAllDriversCarsByDriverId(String driverId) {
         var driver = driverRepository.findById(driverId);
