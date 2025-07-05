@@ -4,9 +4,12 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import ua.hudyma.tripservice.domain.Trip;
@@ -30,6 +33,7 @@ public class DriverService {
     private final TripClient tripClient;
     private final DiscoveryClient discoveryClient;
     private final RestTemplate restTemplate;
+    private final CircuitBreakerFactory circuitBreakerFactory;
     private final DriverRepository driverRepository;
 
     @PostConstruct
@@ -44,20 +48,30 @@ public class DriverService {
         }
     }
 
-    public List<ReviewDto> getAllReviewsForDriverIdAndTripId (String driverId, String tripId){
-        var instances = discoveryClient.getInstances("rating-service");
-        ServiceInstance serviceInstance = instances.get(0);
+    public List<ReviewDto> getAllReviewsForDriverIdAndTripId(String driverId, String tripId) {
+        var instances = discoveryClient
+                .getInstances("rating-service");
+        var serviceInstance = instances.get(0);
         var uri = serviceInstance.getUri() + "/reviews/{driverId}/{tripId}";
-        return restTemplate.exchange(
-                uri,
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<List<ReviewDto>>(){},
-                driverId,
-                tripId).getBody();
+        return circuitBreakerFactory
+                .create("user-service")
+                .run(() -> restTemplate.exchange(
+                                uri,
+                                HttpMethod.GET,
+                                null,
+                                new ParameterizedTypeReference<List<ReviewDto>>() {},
+                                driverId, tripId),
+                        throwable -> new ResponseEntity<>(
+                                List.of(new ReviewDto(
+                                        null,
+                                        null,
+                                        null,
+                                        "CIRCUIT-BREAKER")),
+                                HttpStatus.OK))
+                .getBody();
     }
 
-    public List<Trip> getAllTripsByDriverId(String driverId){
+    public List<Trip> getAllTripsByDriverId(String driverId) {
         checkEureka();
         try {
             return tripClient.findAllByDriverId(driverId);
@@ -68,7 +82,7 @@ public class DriverService {
         }
     }
 
-    public Profile getProfileByDriverId (String userId){
+    public Profile getProfileByDriverId(String userId) {
         var driver = driverRepository
                 .findById(userId).orElseThrow();
         return driver.getProfile();

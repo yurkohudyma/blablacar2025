@@ -7,7 +7,6 @@ import ua.hudyma.ratingservice.domain.Review;
 import ua.hudyma.ratingservice.dto.ReviewDto;
 import ua.hudyma.ratingservice.repository.ReviewRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,14 +20,15 @@ public class ReviewService {
     }
 
     public List<ReviewDto> findAllByRatingIdAndTripId(Long ratingId, String tripId) {
-        List<Review> reviews = reviewRepository.findAllByRatingIdAndTripId(ratingId, tripId);
-        return convertToDto(reviews);
+        return convertToDto(reviewRepository
+                .findAllByRatingIdAndTripId(ratingId, tripId));
     }
 
     private List<ReviewDto> convertToDto(List<Review> reviewList) {
         return reviewList.stream()
                 .map(review -> new ReviewDto(
                         review.getGrade(),
+                        review.getPassengerId(),
                         review.getPublishedOn(),
                         review.getReviewText()))
                 .toList();

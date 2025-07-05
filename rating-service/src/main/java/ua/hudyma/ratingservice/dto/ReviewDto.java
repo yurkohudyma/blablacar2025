@@ -1,4 +1,6 @@
 package ua.hudyma.ratingservice.dto;
 
-public record ReviewDto(Integer grade, java.util.Date publishedOn, String reviewText) {
+import java.util.Date;
+
+public record ReviewDto(Integer grade, String authorId, Date publishedOn, String reviewText) {
 }
