@@ -25,9 +25,9 @@ public class CarController {
         return carRepository.findById(id).orElseThrow();
     }
 
-    /*@GetMapping("/getCars/{userId}")
-    public List<Car> getDriversCarList (@PathVariable String userId){
-        return carService.getCarListByUserId (userId);
+    /*@GetMapping("/getCars/{driverId}")
+    public List<Car> getDriversCarList (@PathVariable String driverId){
+        return carService.getCarListByDriverId(driverId);
     }*/
 
     @PostMapping("/{userId}")

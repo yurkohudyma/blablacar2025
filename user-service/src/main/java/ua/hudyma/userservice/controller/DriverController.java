@@ -5,6 +5,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ua.hudyma.tripservice.domain.Trip;
+import ua.hudyma.userservice.domain.Car;
 import ua.hudyma.userservice.domain.Driver;
 import ua.hudyma.userservice.domain.Profile;
 import ua.hudyma.userservice.dto.ReviewDto;
@@ -18,6 +19,11 @@ import java.util.List;
 @RequestMapping("/drivers")
 public class DriverController {
     private final DriverService driverService;
+
+    @GetMapping("/getAllCars/{driverId}")
+    public List<Car> getAllDriversCars (@PathVariable String driverId){
+        return driverService.getAllDriversCarsByDriverId(driverId);
+    }
 
     @GetMapping("/profile/{userId}")
     public Profile getProfile (@PathVariable String userId){

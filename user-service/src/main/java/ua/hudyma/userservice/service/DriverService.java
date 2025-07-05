@@ -15,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 import ua.hudyma.tripservice.domain.Trip;
 import ua.hudyma.tripservice.dto.TripDto;
 import ua.hudyma.userservice.client.TripClient;
+import ua.hudyma.userservice.domain.Car;
 import ua.hudyma.userservice.domain.Driver;
 import ua.hudyma.userservice.domain.ExperienceLevel;
 import ua.hudyma.userservice.domain.Profile;
@@ -121,5 +122,16 @@ public class DriverService {
         var uri = serviceInstance.getUri() + "/trips/{id}";
         var trip = restTemplate.getForObject(uri, TripDto.class, tripId);
         return driverRepository.findByUserId(trip.driverId()).orElseThrow();
+    }
+
+    public List<Car> getAllDriversCarsByDriverId(String driverId) {
+        var driver = driverRepository.findById(driverId);
+        if (driver.isPresent()){
+            return driver.get().getCarList();
+        }
+        else {
+            log.error("driver {} not found", driverId);
+            return Collections.emptyList();
+        }
     }
 }

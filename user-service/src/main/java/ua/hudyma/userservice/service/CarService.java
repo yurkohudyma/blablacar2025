@@ -13,8 +13,7 @@ public class CarService {
 
     private final CarRepository carRepository;
 
-
-    /*public List<Car> getCarListByUserId(String userId) {
-        return carRepository.findAllByDriverId(userId);
+    /*public List<Car> getCarListByDriverId(String driverId) {
+        return carRepository.findAllByDriverId(driverId);
     }*/
 }
