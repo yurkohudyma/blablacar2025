@@ -36,7 +36,7 @@ public class DriverService {
     private final TripClient tripClient;
     private final DiscoveryClient discoveryClient;
     private final RestTemplate restTemplate;
-    private final CircuitBreakerFactory<?,?> circuitBreakerFactory;
+    private final CircuitBreakerFactory<?, ?> circuitBreakerFactory;
     private final DriverRepository driverRepository;
 
     @PostConstruct
@@ -62,7 +62,8 @@ public class DriverService {
                                 uri,
                                 HttpMethod.GET,
                                 null,
-                                new ParameterizedTypeReference<List<ReviewDto>>() {},
+                                new ParameterizedTypeReference<List<ReviewDto>>() {
+                                },
                                 driverId, tripId),
                         throwable -> new ResponseEntity<>(
                                 List.of(new ReviewDto(
@@ -123,22 +124,21 @@ public class DriverService {
         }
         var serviceInstance = instances.get(0);
         var uri = serviceInstance.getUri() + "/trips/{id}";
-        var trip = restTemplate.getForObject(uri, TripDto.class, tripId);
-
-        if (trip == null || trip.driverId() == null) {
-            return new Driver();
-        }
-        return driverRepository.findByUserId(trip.driverId())
-                .orElse(new Driver());
+        var trip = Optional.of(
+                restTemplate
+                        .getForObject(uri, TripDto.class, tripId));
+        return trip.map(tripDto ->
+                driverRepository
+                        .findByUserId(tripDto.driverId())
+                        .orElse(new Driver()))
+                .orElseGet(Driver::new);
     }
-
 
     public List<Car> getAllDriversCarsByDriverId(String driverId) {
         var driver = driverRepository.findById(driverId);
-        if (driver.isPresent()){
+        if (driver.isPresent()) {
             return driver.get().getCarList();
-        }
-        else {
+        } else {
             log.error("driver {} not found", driverId);
             return Collections.emptyList();
         }

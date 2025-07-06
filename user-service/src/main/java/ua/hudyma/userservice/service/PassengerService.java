@@ -32,7 +32,7 @@ public class PassengerService {
                 .toList();
     }
 
-    public void persist(Passenger passenger, String tripId) {
+    public boolean persist(Passenger passenger, String tripId) {
         var list = bookingClient.findAllByTripId(tripId);
         var passIdAllreadyBoundWithTrip =
                 list.stream()
@@ -41,6 +41,7 @@ public class PassengerService {
         if (passIdAllreadyBoundWithTrip) {
             log.error("passenger {} already bound with trip {}",
                     passenger.getUserId(), tripId);
+            return false;
         } else {
             passenger.setExpLevel(ExperienceLevel.NEWCOMER);
             var tripQty = passenger.getTripQuantity();
@@ -49,6 +50,7 @@ public class PassengerService {
             passengerRepository.save(passenger);
             bookingClient.createTripPassengerBinding(
                     new TripPassengerDto(passenger.getUserId(), tripId));
+            return true;
         }
     }
 

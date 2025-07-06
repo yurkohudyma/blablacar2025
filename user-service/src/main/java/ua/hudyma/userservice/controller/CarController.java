@@ -16,24 +16,15 @@ import java.util.List;
 @RequestMapping("/cars")
 public class CarController {
 
-    private final CarRepository carRepository;
-    private final DriverRepository driverRepository;
     private final CarService carService;
 
     @GetMapping("/{id}")
     public Car getCarById (@PathVariable String id){
-        return carRepository.findById(id).orElseThrow();
+        return carService.findById(id);
     }
 
     @PostMapping("/{userId}")
     public void addCar (@RequestBody Car car, @PathVariable String userId){
-        var driver = driverRepository.findById(userId);
-        if (driver.isPresent()) {
-            car.setDriver(driver.get());
-            carRepository.save(car);
-        }
-        else {
-            log.error("Driver {} not found", userId);
-        }
+        carService.addCar(car, userId);
     }
 }

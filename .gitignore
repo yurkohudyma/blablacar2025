@@ -44,3 +44,4 @@ build/
 /db/cars.csv
 /db/drivers.csv
 /db/passengers.csv
+/notification-service/src/main/resources/application.properties
