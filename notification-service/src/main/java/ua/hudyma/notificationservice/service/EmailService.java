@@ -34,7 +34,8 @@ public class EmailService {
 
     private void generateHtmlContentAndSend(Map<String, Object> model, String sendTo) throws
             IOException, EmailNotSentException {
-        var htmlContent = emailTemplateBuilder.buildTemplate("email", model);
+        var htmlContent = emailTemplateBuilder
+                .buildTemplate("email", model);
         var message = mailSender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(
