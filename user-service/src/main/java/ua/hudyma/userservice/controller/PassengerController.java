@@ -12,7 +12,6 @@ import ua.hudyma.userservice.dto.UserDto;
 import ua.hudyma.userservice.service.NotificationService;
 import ua.hudyma.userservice.service.PassengerService;
 
-import javax.management.Notification;
 import java.util.List;
 
 @RestController
@@ -33,7 +32,7 @@ public class PassengerController {
     public void addPassenger(@RequestBody Passenger passenger,
                              @PathVariable String tripId) {
         if (passengerService.persist(passenger, tripId)) {
-            notificationService.apply(new EventDto(
+            notificationService.sendEmail(new EventDto(
                     new UserDto(passenger.getUserId(),
                             compileFullName(passenger)),
                     EventType.PASSENGER_ADDED,

@@ -7,6 +7,12 @@ spring:
      username: postgres
      password: postgres
      driver-class-name: org.postgresql.Driver
+  cloud:
+    stream:
+      bindings:
+        emailEventSentConsumer-in-0:
+          destination: email-topic
+          group: email-event-queue
 
   application:
     name: user-service

@@ -1,6 +1,5 @@
 package ua.hudyma.userservice.service;
 
-import jakarta.annotation.Nullable;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -23,7 +22,6 @@ import ua.hudyma.userservice.domain.Profile;
 import ua.hudyma.userservice.dto.ReviewDto;
 import ua.hudyma.userservice.repository.DriverRepository;
 
-import java.net.URI;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
