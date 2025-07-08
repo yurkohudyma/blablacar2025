@@ -1,4 +1,4 @@
-package ua.hudyma.notificationservice.domain;
+package ua.hudyma.tripservice.dto;
 
 public enum EventType {
     PASSENGER_ADDED,

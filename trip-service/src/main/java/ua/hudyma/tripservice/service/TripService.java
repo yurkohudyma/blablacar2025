@@ -4,9 +4,13 @@ import com.aventrix.jnanoid.jnanoid.NanoIdUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
 import ua.hudyma.tripservice.client.UserClient;
 import ua.hudyma.tripservice.domain.TripStatus;
+import ua.hudyma.tripservice.dto.EventDto;
+import ua.hudyma.tripservice.dto.EventType;
+import ua.hudyma.tripservice.dto.UserDto;
 import ua.hudyma.tripservice.repository.TripRepository;
 import ua.hudyma.tripservice.domain.Trip;
 import ua.hudyma.tripservice.util.DistanceCalculator;
@@ -25,9 +29,13 @@ public class TripService {
     private final TripRepository tripRepository;
     private final CityService cityService;
     private final UserClient userClient;
+    private final StreamBridge streamBridge;
 
     @Value("${trip.base-price}")
     private Double price;
+
+    @Value("${telegram.master.chatId}")
+    private String chatId;
 
     public Optional<Trip> getTripById(String id) {
         return tripRepository.findById(id);
@@ -59,6 +67,9 @@ public class TripService {
             trip.setStatus(TripStatus.WAITING_CONFIRMATION);
             tripRepository.save(trip);
             //todo implement incrementing tripQuantity field upon reaching COMPLETE status for trip
+            var event = new EventDto(new UserDto(userId, "ADMIN"), EventType.TRIP_ADDED, chatId);
+            streamBridge.send("trip-creation-topic", event);
+            log.info("----- trip creation event for {} shared to bridge", event.sendTo());
         }
         else {
             log.error("driver {} not found", userId);

@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.web.bind.annotation.*;
-import ua.hudyma.notificationservice.domain.EventDto;
+import ua.hudyma.notificationservice.dto.EventDto;
 import ua.hudyma.notificationservice.service.EmailService;
 
 import java.io.IOException;

@@ -2,11 +2,16 @@ package ua.hudyma.telegramservice.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ua.hudyma.telegramservice.domain.Message;
 import ua.hudyma.telegramservice.domain.TelegramUser;
 import ua.hudyma.telegramservice.repository.MessageRepository;
 import ua.hudyma.telegramservice.repository.TelegramRepository;
+
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor

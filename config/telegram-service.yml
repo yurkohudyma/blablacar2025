@@ -9,6 +9,13 @@ spring:
       database: bbc_telegramservice
   application:
     name: telegram-service
+  cloud:
+    stream:
+      bindings:
+        tripCreatedEventSentConsumer-in-0:
+          destination: trip-creation-topic
+          group: trip-event-queue
+
 
   mvc:
     hiddenmethod:

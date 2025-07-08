@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ua.hudyma.telegramservice.service.TelegramBot;
+import ua.hudyma.telegramservice.service.TelegramBotService;
+import ua.hudyma.telegramservice.service.TelegramService;
 
 import java.util.Map;
 
@@ -18,28 +20,10 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Log4j2
 public class TelegramMessageController {
-    private final TelegramBot telegramBot;
+    private final TelegramBotService telegramBotService;
 
     @PostMapping
     public ResponseEntity<String> sendMessage(@RequestBody Map<String, String> payload) {
-        String chatId = payload.get("chatId");
-        String messageText = payload.get("messageText");
-
-        if (chatId == null || messageText == null || chatId.isEmpty() || messageText.isEmpty()) {
-            return ResponseEntity.badRequest().body("Поля 'chatId' та 'messageText' є обов'язковими.");
-        }
-
-        SendMessage message = new SendMessage();
-        message.setChatId(chatId);
-        message.setText(messageText);
-
-        try {
-            telegramBot.execute(message);
-            return ResponseEntity.ok("Повідомлення успішно відправлено!");
-        } catch (TelegramApiException e) {
-            log.error("Помилка відправки повідомлення: " + e.getMessage());
-            e.printStackTrace();
-            return ResponseEntity.internalServerError().body("Не вдалося відправити повідомлення: " + e.getMessage());
-        }
+        return telegramBotService.sendMessage(payload);
     }
 }

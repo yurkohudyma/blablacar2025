@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import ua.hudyma.notificationservice.domain.EventDto;
+import ua.hudyma.notificationservice.dto.EventDto;
 import ua.hudyma.notificationservice.exception.EmailNotSentException;
 
 import java.io.IOException;
