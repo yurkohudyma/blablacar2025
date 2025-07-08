@@ -68,6 +68,7 @@
         <module>booking-service</module>
         <module>rating-service</module>
 		<module>notification-service</module>
+		<module>telegram-service</module>
     </modules>
 
 </project>

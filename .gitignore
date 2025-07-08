@@ -45,3 +45,4 @@ build/
 /db/drivers.csv
 /db/passengers.csv
 /notification-service/src/main/resources/application.properties
+/telegram-service/src/main/resources/application.properties
