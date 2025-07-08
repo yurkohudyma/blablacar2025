@@ -11,7 +11,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ua.hudyma.telegramservice.service.TelegramBot;
 
-import java.util.Map; // Для простого прикладу з Map в @RequestBody
+import java.util.Map;
 
 @RestController
 @RequestMapping("/telegram")

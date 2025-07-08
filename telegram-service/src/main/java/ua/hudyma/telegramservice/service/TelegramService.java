@@ -15,24 +15,30 @@ public class TelegramService {
     private final TelegramRepository telegramRepository;
     private final MessageRepository messageRepository;
 
-    public void persistUser(TelegramUser user) {
-        var tlgUser = telegramRepository.findByChatId(user.getChatId()); 
-        if (tlgUser.isEmpty()) {
-            telegramRepository.save(user);
-            log.info("---- saved user chatId = {}", user.getChatId());            
-        } else if (user.getName() != null &&
-                !user.getName().isEmpty() &&
-                tlgUser.get().getName() == null ||
-                tlgUser.get().getName().isEmpty()) {
-            tlgUser.get().setName(user.getName());
-            telegramRepository.save(tlgUser.get());
-            log.info("username {} for chatId = {} discovered, updating", user.getName(), user.getChatId());
-        } else {
-            log.error("telegram user with chatId = {} exists, no persist", user.getChatId());
-        }
+    public void persistUser(TelegramUser newUser) {
+        telegramRepository.findByChatId(newUser.getChatId())
+                .ifPresentOrElse(existingUser -> {
+            boolean existingNameEmpty = existingUser.getName() == null ||
+                    existingUser.getName().isEmpty();
+            boolean newNameAvailable = newUser.getName() != null &&
+                    !newUser.getName().isEmpty();
+
+            if (existingNameEmpty && newNameAvailable) {
+                existingUser.setName(newUser.getName());
+                telegramRepository.save(existingUser);
+                log.info("Username '{}' for chatId = {} discovered, updating",
+                        newUser.getName(), newUser.getChatId());
+            } else {
+                log.info("Telegram user [{} / {}] exists, no update needed",
+                        newUser.getChatId(), existingUser.getName());
+            }
+        }, () -> {
+            telegramRepository.save(newUser);
+            log.info("Saved new user with chatId = {}", newUser.getChatId());
+        });
     }
 
-    public void persistMessage (Message message){
+    public void persistMessage(Message message) {
         messageRepository.save(message);
         log.info("message from {} saved", message.getChatId());
     }

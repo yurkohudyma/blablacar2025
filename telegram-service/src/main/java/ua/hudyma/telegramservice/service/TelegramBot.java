@@ -32,7 +32,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             long chatId = update.getMessage().getChatId();
             telegramService.persistMessage(new Message(String.valueOf(chatId), messageText));
-            String responseText = "Отримав твоє повідомлення: '" + messageText + "'";
+            String responseText = "Привіт з Франківська!!!";
 
             SendMessage message = new SendMessage();
             message.setChatId(chatId);
@@ -40,25 +40,21 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             try {
                 execute(message);
-                var user = update.getMessage().getFrom();
+                var userFrom = update.getMessage().getFrom();
                 var chatIdStr = String.valueOf(chatId);
-                var tlgUser = new TelegramUser();
-                if (user != null){
-                    var userName = user.getUserName();
-                    if (userName != null && !userName.isEmpty()){
-                        tlgUser.setName(userName);
+                var newUser = new TelegramUser();
+                if (userFrom != null) {
+                    var userName = userFrom.getUserName();
+                    if (userName != null && !userName.isEmpty()) {
+                        newUser.setName(userName);
                     }
                 }
-                tlgUser.setChatId(chatIdStr);
-                telegramService.persistUser(tlgUser);
+                newUser.setChatId(chatIdStr);
+                telegramService.persistUser(newUser);
 
             } catch (TelegramApiException e) {
                 log.error(e);
             }
         }
-    }
-
-    private Message convertToMessage(SendMessage sendMessage) {
-        return new Message(sendMessage.getChatId(), sendMessage.getText());
     }
 }
