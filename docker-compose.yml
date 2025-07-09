@@ -1,0 +1,137 @@
+version: "3.8"
+
+services:
+  config-service:
+    image: your-dockerhub/config-service:latest
+    container_name: config-service
+    ports:
+      - "8888:8888"
+    networks:
+      - blablacar-net
+
+  discovery-service:
+    image: your-dockerhub/discovery-service:latest
+    container_name: discovery-service
+    ports:
+      - "8761:8761"
+    depends_on:
+      - config-service
+    networks:
+      - blablacar-net
+
+  mongodb:
+    image: mongo:6.0
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - blablacar-net
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: bbc_ratingservice
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - blablacar-net
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - blablacar-net
+
+  user-service:
+    image: your-dockerhub/user-service:latest
+    container_name: user-service
+    ports:
+      - "9090:9090"
+    depends_on:
+      - discovery-service
+      - config-service
+      - mongodb
+      - rabbitmq
+    networks:
+      - blablacar-net
+
+  trip-service:
+    image: your-dockerhub/trip-service:latest
+    container_name: trip-service
+    ports:
+      - "9091:9091"
+    depends_on:
+      - discovery-service
+      - config-service
+      - mongodb
+      - rabbitmq
+    networks:
+      - blablacar-net
+
+  booking-service:
+    image: your-dockerhub/booking-service:latest
+    container_name: booking-service
+    ports:
+      - "9094:9094"
+    depends_on:
+      - discovery-service
+      - config-service
+      - mongodb
+      - rabbitmq
+    networks:
+      - blablacar-net
+
+  rating-service:
+    image: your-dockerhub/rating-service:latest
+    container_name: rating-service
+    ports:
+      - "9092:9092"
+    depends_on:
+      - discovery-service
+      - config-service
+      - mysql
+    networks:
+      - blablacar-net
+
+  notification-service:
+    image: your-dockerhub/notification-service:latest
+    container_name: notification-service
+    ports:
+      - "9093:9093"
+    depends_on:
+      - discovery-service
+      - config-service
+      - mongodb
+      - rabbitmq
+    networks:
+      - blablacar-net
+
+  telegram-service:
+    image: your-dockerhub/telegram-service:latest
+    container_name: telegram-service
+    ports:
+      - "9096:9096"
+    depends_on:
+      - discovery-service
+      - config-service
+      - mongodb
+      - rabbitmq
+    networks:
+      - blablacar-net
+
+volumes:
+  mongo_data:
+  mysql_data:
+
+networks:
+  blablacar-net:
+    driver: bridge
