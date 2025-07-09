@@ -30,7 +30,7 @@ public class RabbitConfig {
                 log.info("Parsed event: {}", event);
                 telegramBotService.sendMessage(Map.of(
                         "chatId", event.sendTo(),
-                        "messageText", event.eventType().toString()));
+                        "messageText", event.eventType().toString() + "/" + event.userDto().userId() + "/" + event.userDto().username()));
             } catch (Exception e) {
                 log.error("Failed to parse EventDto", e);
             }
