@@ -3,16 +3,22 @@ server:
 
 spring:
   datasource:
-     url: jdbc:postgresql://localhost:5432/bbc_userservice
-     username: postgres
-     password: postgres
-     driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/bbc_userservice
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
   cloud:
     stream:
       bindings:
         emailEventSentConsumer-in-0:
           destination: email-topic
           group: email-event-queue
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8888/realms/BlaBlaCar2025
 
   application:
     name: user-service

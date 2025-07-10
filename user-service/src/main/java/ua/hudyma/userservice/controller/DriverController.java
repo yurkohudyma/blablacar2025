@@ -20,6 +20,11 @@ import java.util.List;
 public class DriverController {
     private final DriverService driverService;
 
+    @GetMapping("/public/hello")
+    public String publicHello() {
+        return "Hello from public endpoint!";
+    }
+
     @GetMapping("/getAllCars/{driverId}")
     public List<Car> getAllDriversCars (@PathVariable String driverId){
         return driverService.getAllDriversCarsByDriverId(driverId);
