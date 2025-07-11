@@ -10,12 +10,12 @@ import org.springframework.web.util.UriComponentsBuilder;
 import ua.hudyma.tripservice.domain.City;
 
 @Component
-@ConfigurationProperties(prefix = "api")
+@ConfigurationProperties(prefix = "graphhopper.api")
 public class DistanceService {
 
     private static final RestTemplate restTemplate = new RestTemplate();
     private static String staticKey;
-    @Value("${api.key}")
+    @Value("${graphhopper.api.key}")
     private String key;
 
     public void setKey(String key) {

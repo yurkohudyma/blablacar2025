@@ -3,6 +3,7 @@ package ua.hudyma.tripservice.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ua.hudyma.tripservice.domain.City;
 import ua.hudyma.tripservice.service.CityService;
@@ -25,6 +26,12 @@ public class CityController {
         Arrays.stream(cities)
               .forEach(cityService::persistCity);
         return ResponseEntity.ok().body("Added all");
+    }
+
+    @PreAuthorize("hasRole('SERVICE')")
+    @GetMapping("/role")
+    public String roleProtectedEndpoint() {
+        return "Hello from role protected endpoint!";
     }
 
     @GetMapping

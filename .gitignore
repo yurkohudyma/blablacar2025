@@ -46,3 +46,6 @@ build/
 /db/passengers.csv
 /notification-service/src/main/resources/application.properties
 /telegram-service/src/main/resources/application.properties
+/trip-service/src/main/resources/application.yml
+/booking-service/src/main/resources/application.yml
+/rating-service/src/main/resources/application.yml

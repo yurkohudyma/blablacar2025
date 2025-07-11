@@ -9,6 +9,11 @@ spring:
       database: bbc_bookingservice
   application:
     name: booking-service
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8888/realms/BlaBlaCar2025
 
   mvc:
     hiddenmethod:
