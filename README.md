@@ -1,28 +1,51 @@
 <h2>Microserviced project cloning main BlaBlaCar logic</h2>
-Encompasses m/s at ports:
+Encompasses m/s:
 <ul>
-<li>eureka-server: 8761</li>
-<li>config-service: 9090</li>
-<li>user-service: 9091</li>
-<li>rating-service: 9092</li>
-<li>notification-service: 9093</li>
-<li>trip-service: 9094</li>
-<li>booking-service: 9095</li>
-<li>telegram-service: 9096</li>
+<li>eureka-server</li>
+<li>config-service</li>
+<li>user-service</li>
+<li>rating-service</li>
+<li>notification-service</li>
+<li>trip-service</li>
+<li>booking-service</li>
+<li>telegram-service</li>
 </ul>
 
 <h3>Stack:</h3>
 <ul>
-<li>Spring Boot 3.5.0, Cloud, Security, Function, REST</li>
-<li>RabbitMQ for messaging
-<li>OpenFeign Api for HTTP req interconnect
-<li>Resilience4j (circuit-Breaker and Fallback logic)
-<li>Keycloak Auth server 22.0.5</li>
-<li>Trip-service utilises:</li>  
-  <ol>
-  <li>GraphHopper Api for finding optimal route between cities</li>
-  <li>Haversine direct distance calculator berween geocoordinates</li>
-  <li>MySQL DBase</li>
-</ol>
+  <li>Spring Boot 3.5.0, Cloud, Security, Function, REST, Docker container</li>
+  <li>RabbitMQ for messaging
+  <li>OpenFeign Api for HTTP req interconnect
+  <li>Resilience4j (circuit-Breaker and Fallback logic)
+  <li>Keycloak Auth server 22.0.5</li>
+  - FeignClientInterceptor for sharing tokens between services
+  <li>Trip-service utilises:</li>
+  <ol type="1">
+    <li>GraphHopper Api for finding optimal route between cities</li>
+    <li>Haversine direct distance calculator berween geocoordinates</li>
+    <li>MySQL DBase</li>
+  </ol><br>
+<li>Notification-service utilises:</li> 
+  <ol type="1">
+    <li>Twillio Api for sending SMS</li>
+    <li>Gmail API for emails</li>
+    <li>Telegram Bot Api service</li>
+    <li>Mongo DB</li><br>
+  </ol>
+<li>User-service utilises:</li> 
+  <ol type = "1">
+    <li>Users division onto Drivers and Passengers</li>
+    <li>PostGres DB</li><br>
+  </ol>
+<li>booking-service:</li> 
+  <ol type="1">
+    <li>saves information on trip booking by passengers</li>
+    <li>MongoDB</li>
+  </ol><br>
+<li>rating-service:</li> 
+    <ol type="1">
+      <li>saves information on trip's drivers rating and review by passengers</li>
+      <li>MySQL DBase</li>
+  </ol>
 </ul>
 
