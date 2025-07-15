@@ -13,11 +13,15 @@ Encompasses m/s:
 
 <h3>Stack:</h3>
 <ul>
-  <li>Spring Boot 3.5.0, Cloud, Security, Function, REST, Docker container</li>
+  <li>Spring Boot 3.5.0, Spring Cloud, Spring Security, Spring Stream, Spring Function, RESTTemplate, Docker container, Mapstruct for DTOs</li>
+  <li>JUnit and Mockito for testing</li>
+  <li>Jnanoid API for generating randomise IDs</li>
+  <li>Dedicated config-server for microservices centralised config repository</li>
+  <li>Netflix Eureka Discovery service for pinging services </li>
   <li>RabbitMQ for messaging
   <li>OpenFeign Api for HTTP req interconnect
   <li>Resilience4j (circuit-Breaker and Fallback logic)
-  <li>Keycloak Auth server 22.0.5</li>
+  <li>Keycloak oauth2 server 22.0.5</li>
   - FeignClientInterceptor for sharing tokens between services
   <li>Trip-service utilises:</li>
   <ol type="1">
