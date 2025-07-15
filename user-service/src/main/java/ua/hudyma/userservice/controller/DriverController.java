@@ -9,6 +9,7 @@ import ua.hudyma.tripservice.domain.Trip;
 import ua.hudyma.userservice.domain.Car;
 import ua.hudyma.userservice.domain.Driver;
 import ua.hudyma.userservice.domain.Profile;
+import ua.hudyma.userservice.dto.DriverDto;
 import ua.hudyma.userservice.dto.ReviewDto;
 import ua.hudyma.userservice.service.DriverService;
 
@@ -20,6 +21,30 @@ import java.util.List;
 @RequestMapping("/drivers")
 public class DriverController {
     private final DriverService driverService;
+
+    /**
+     * Inbound Feign Client assisted call from tripservice
+     */
+    /*@PostMapping("/save")
+    public void persistDriverDto (@RequestBody DriverDto driverDto){
+        driverService.persist(DriverMapper.INSTANCE.toEntity(driverDto));
+    }*/
+
+    /**
+     * Inbound Feign Client assisted call from tripservice
+     */
+    @PostMapping("/updateTripQty/{userId}")
+    public void updateUserTripQty (@PathVariable String userId){
+        driverService.updateUserTripQty (userId);
+    }
+
+    /**
+     * Inbound Feign Client assisted call from tripservice
+     */
+    @GetMapping("/getDriverDto/{userId}")
+    public DriverDto findById (@PathVariable String userId){
+        return driverService.getDriverDtoById(userId);
+    }
 
     @GetMapping("/public/hello")
     public String publicHello() {
@@ -47,12 +72,15 @@ public class DriverController {
         return driverService.existsById (userId);
     }
 
+    /**
+     * Feign Client assisted call
+     */
     @GetMapping("/getAllTrips/{userId}")
     public List<Trip> getTripByDriverId (@PathVariable String userId){
         return driverService.getAllTripsByDriverId(userId);
     }
 
-    @GetMapping("{tripId}")
+    @GetMapping("/{tripId}")
     public Driver getDriverByTripId (@PathVariable String tripId){
         return driverService.getDriverByTripId(tripId);
     }
@@ -63,6 +91,9 @@ public class DriverController {
         driverService.persist (driver);
     }
 
+    /**
+     * Discovery Client assisted call
+     */
     @GetMapping("/reviews/{driverId}/{tripId}")
     public List<ReviewDto> getAllReviewsForDriverAndTrip (@PathVariable String driverId,
                                                           @PathVariable String tripId){

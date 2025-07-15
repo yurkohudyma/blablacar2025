@@ -10,7 +10,7 @@ import ua.hudyma.tripservice.client.UserClient;
 import ua.hudyma.tripservice.domain.TripStatus;
 import ua.hudyma.tripservice.dto.EventDto;
 import ua.hudyma.tripservice.dto.EventType;
-import ua.hudyma.tripservice.dto.UserDto;
+import ua.hudyma.tripservice.dto.UserSmallDto;
 import ua.hudyma.tripservice.repository.TripRepository;
 import ua.hudyma.tripservice.domain.Trip;
 import ua.hudyma.tripservice.util.DistanceCalculator;
@@ -49,6 +49,9 @@ public class TripService {
         return tripRepository.existsById(tripId);
     }
 
+    /**
+     * Inbound Feign Client assisted call from user-service
+     */
     public List<Trip> getAllTripsByDriverId(String driverId) {
         return tripRepository.findAllByDriverId(driverId);
     }
@@ -56,9 +59,9 @@ public class TripService {
     public void persistTripForDriver(Trip trip, String userId, String depId, String destId) {
         var depCity = cityService.getCityById(depId);
         var destCity = cityService.getCityById(destId);
-        if (userClient.existsById(userId)){
+        if (userClient.existsById(userId)) {
             trip.setDriverId(userId);
-            //todo retrieve user for setting 0 trips counter
+            setTripQtyToZeroOrIncrement(userId);
             depCity.ifPresent(trip::setDeparture);
             destCity.ifPresent(trip::setDestination);
             applyGeneratedData(trip);
@@ -67,14 +70,20 @@ public class TripService {
             trip.setStatus(TripStatus.WAITING_CONFIRMATION);
             tripRepository.save(trip);
             //todo implement incrementing tripQuantity field upon reaching COMPLETE status for trip
-            var event = new EventDto(new UserDto(userId, "ADMIN"), EventType.TRIP_ADDED, chatId);
-            streamBridge.send("trip-creation-topic", event);
+            var event = new EventDto(new UserSmallDto(userId, "ADMIN"), EventType.TRIP_ADDED, chatId);
+            streamBridge.send("trip-creation-topic", event); //this::sending msg to NotifService for emailing
             log.info("----- trip creation event for {} shared to bridge", event.sendTo());
-        }
-        else {
+        } else {
             log.error("driver {} not found", userId);
         }
 
+    }
+
+    /**
+     * Outbound Feign Client assisted call to userservice
+     */
+    private void setTripQtyToZeroOrIncrement(String userId) {
+        userClient.setUserTripQtyToZeroOrIncrement(userId);
     }
 
     private void applyGeneratedData(Trip trip) {

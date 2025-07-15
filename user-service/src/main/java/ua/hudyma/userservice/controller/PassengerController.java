@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ua.hudyma.userservice.domain.EventType;
 import ua.hudyma.userservice.domain.Passenger;
 import ua.hudyma.userservice.dto.EventDto;
-import ua.hudyma.userservice.dto.UserDto;
+import ua.hudyma.userservice.dto.UserSmallDto;
 import ua.hudyma.userservice.service.NotificationService;
 import ua.hudyma.userservice.service.PassengerService;
 
@@ -33,7 +33,7 @@ public class PassengerController {
                              @PathVariable String tripId) {
         if (passengerService.persist(passenger, tripId)) {
             notificationService.sendEmail(new EventDto(
-                    new UserDto(passenger.getUserId(),
+                    new UserSmallDto(passenger.getUserId(),
                             compileFullName(passenger)),
                     EventType.PASSENGER_ADDED,
                     passenger.getProfile().getEmail()));

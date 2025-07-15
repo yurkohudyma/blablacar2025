@@ -37,14 +37,6 @@ public class TripPassengerController {
         return tripPassengerService.getAllTripPassByTripId (tripId);
     }
 
-    /*@GetMapping("/{tripId}")
-    public List<TripDto> getAllPassengersByTripId (@PathVariable String tripId){
-        return getTripPasByTripId(tripId)
-                .stream()
-                .map(trip -> new TripDto(trip.getPassengerId(), trip.getTripId()))
-                .toList();
-    }*/
-
     @DeleteMapping("/{objectId}")
     public ResponseEntity<String> deleteBindingById (
             @PathVariable String objectId){

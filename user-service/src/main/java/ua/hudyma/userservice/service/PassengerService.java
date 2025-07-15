@@ -5,6 +5,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import ua.hudyma.userservice.client.BookingClient;
 import ua.hudyma.userservice.client.TripClient;
+import ua.hudyma.userservice.domain.Driver;
 import ua.hudyma.userservice.domain.ExperienceLevel;
 import ua.hudyma.userservice.domain.Passenger;
 import ua.hudyma.userservice.dto.TripPassengerDto;
@@ -86,5 +87,8 @@ public class PassengerService {
         }
     }
 
+    public void findPassengerAndUpdateTripQty(String userId) {
+        //todo update Passenger trip Qty
+    }
 }
 

@@ -6,20 +6,24 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import ua.hudyma.tripservice.domain.Trip;
-import ua.hudyma.tripservice.dto.TripDto;
 import ua.hudyma.userservice.client.TripClient;
 import ua.hudyma.userservice.domain.Car;
 import ua.hudyma.userservice.domain.Driver;
 import ua.hudyma.userservice.domain.ExperienceLevel;
 import ua.hudyma.userservice.domain.Profile;
+import ua.hudyma.userservice.dto.DriverDto;
 import ua.hudyma.userservice.dto.ReviewDto;
+import ua.hudyma.userservice.dto.TripDto;
+import ua.hudyma.userservice.mapper.DriverMapper;
 import ua.hudyma.userservice.repository.DriverRepository;
 
 import java.util.Collections;
@@ -49,30 +53,46 @@ public class DriverService {
         }
     }
 
+    /**
+     * Discovery Client assisted call
+     */
     public List<ReviewDto> getAllReviewsForDriverIdAndTripId(String driverId, String tripId) {
-        var instances = discoveryClient
-                .getInstances("rating-service");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String token = null;
+        if (auth instanceof JwtAuthenticationToken jwtAuth) {
+            token = jwtAuth.getToken().getTokenValue();
+        }
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
+        if (token != null) {
+            headers.setBearerAuth(token);
+        }
+        HttpEntity<?> entity = new HttpEntity<>(headers);
+        var instances = discoveryClient.getInstances("rating-service");
+        if (instances == null || instances.isEmpty()) {
+            throw new IllegalStateException("rating-service not found");
+        }
         var serviceInstance = instances.get(0);
         var uri = serviceInstance.getUri() + "/reviews/{driverId}/{tripId}";
+
         return circuitBreakerFactory
                 .create("user-service")
                 .run(() -> restTemplate.exchange(
                                 uri,
                                 HttpMethod.GET,
-                                null,
+                                entity,
                                 new ParameterizedTypeReference<List<ReviewDto>>() {
                                 },
                                 driverId, tripId),
                         throwable -> new ResponseEntity<>(
-                                List.of(new ReviewDto(
-                                        null,
-                                        null,
-                                        null,
-                                        "CIRCUIT-BREAKER")),
+                                List.of(new ReviewDto(null, null, null, "CIRCUIT-BREAKER")),
                                 HttpStatus.OK))
                 .getBody();
     }
 
+    /**
+     * Feign Client assisted call
+     */
     public List<Trip> getAllTripsByDriverId(String driverId) {
         checkEureka();
         try {
@@ -98,6 +118,17 @@ public class DriverService {
     public Optional<Driver> getDriverById(String userId) {
         return driverRepository.findById(userId);
     }
+
+    /**
+     * Inbound Feign Client assisted call from tripservice
+     */
+    public DriverDto getDriverDtoById(String userId) {
+        return driverRepository
+                .findById(userId)
+                .map(DriverMapper.INSTANCE::toDto)
+                .orElseGet(DriverDto::new);
+    }
+
 
     public boolean checkIfExists(String tripId) {
         checkEureka();
@@ -126,9 +157,9 @@ public class DriverService {
                 restTemplate
                         .getForObject(uri, TripDto.class, tripId));
         return trip.map(tripDto ->
-                driverRepository
-                        .findByUserId(tripDto.driverId())
-                        .orElse(new Driver()))
+                        driverRepository
+                                .findByUserId(tripDto.driverId())
+                                .orElse(new Driver()))
                 .orElseGet(Driver::new);
     }
 
@@ -139,6 +170,32 @@ public class DriverService {
         } else {
             log.error("driver {} not found", driverId);
             return Collections.emptyList();
+        }
+    }
+
+    /**
+     * Inbound Feign Client assisted call from tripservice
+     */
+    public void updateUserTripQty(String userId) {
+        //todo distinguish driver or passenger
+        //todo a user with given userId could be both Driver and Passenger
+
+        var user = driverRepository.findById(userId);
+        if (user.isEmpty()) {
+            //passengerService.findPassengerAndUpdateTripQty(userId);
+            //todo inject passenger service, as it bring circular dependency
+            log.error("driver with {} do not EXIST, proceed with Passenger", userId);
+        }
+        else {
+            var usr = user.get();
+            if (usr.getTripQuantity() == null) {
+                usr.setTripQuantity(0L);
+                log.info("driver's trip qty set to ZERO");
+            } else {
+                usr.setTripQuantity(usr.getTripQuantity() + 1L);
+                log.info("driver's trip qty INCREMENTED");
+            }
+            driverRepository.save(usr);
         }
     }
 }

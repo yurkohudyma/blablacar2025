@@ -15,15 +15,15 @@ import java.util.Optional;
 @Log4j2
 @RequestMapping("/trips")
 public class TripController {
-
     private final TripService tripService;
-
 
     @GetMapping("/{id}")
     public Optional<Trip> getTripById(@PathVariable String id) {
         return tripService.getTripById(id);
     }
-
+    /**
+     * Inbound Feign Client assisted call from user-service
+     */
     @GetMapping("/getAllTrips/{driverId}")
     public List<Trip> getTripByDriverId(@PathVariable String driverId) {
         return tripService.getAllTripsByDriverId(driverId);
@@ -44,7 +44,6 @@ public class TripController {
                                    @PathVariable String userId,
                                    @PathVariable String depId,
                                    @PathVariable String destId) {
-
         tripService.persistTripForDriver(trip, userId, depId, destId);
     }
 

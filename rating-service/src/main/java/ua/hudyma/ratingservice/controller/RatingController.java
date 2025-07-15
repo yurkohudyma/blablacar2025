@@ -26,6 +26,7 @@ public class RatingController {
         ratingService.addRating(rating);
     }
 
+    @PreAuthorize("hasRole('SERVICE')")
     @GetMapping("/{ratingId}")
     private Rating getRating (@PathVariable Long ratingId){
         return ratingService.getById (ratingId);
